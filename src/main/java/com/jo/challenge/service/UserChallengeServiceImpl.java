@@ -26,9 +26,9 @@ public class UserChallengeServiceImpl implements UserChallengeService {
         Challenge challenge = challengeService.getChallengeById(userChallengeDto.getChallengeId()).get();
 
         if(LocalDate.now().isBefore(challenge.getStartDay())) { // 챌린지 시작일 이전일까지만 신청
-            if(userChallengeRepository.findByChallengeIdAndUserId(
+            if(!userChallengeRepository.findByChallengeIdAndUserId(
                     userChallengeDto.getChallengeId(),
-                    userChallengeDto.getUserId()) == null
+                    userChallengeDto.getUserId()).isPresent()
             ) { // 동일한 유저의 신청 정보가 없으면 신청 가능
                 userChallengeRepository.save(UserChallenge.builder()
                         .userId(userChallengeDto.getUserId())
